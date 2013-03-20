@@ -22,7 +22,7 @@
 \usepackage{multicol}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[dvips]{graphicx}
+\usepackage{graphicx}
 \usepackage{epsfig}
 \input{tcilatex}
 %-----------------------------------------------------------------------------
@@ -56,17 +56,16 @@
 \begin{document}
 
 % Please use capital letters in the beginning of important words as for example
-\begin{mytitle}A LaTeX Report Template\end{mytitle}
-\begin{mysubtitle}The report subtitle\end{mysubtitle}
+\begin{mytitle}A survey on resource management policies for NUMA architectures\end{mytitle}
 %
 % Please do not insert a line here
 %
 \\
-Last-name First-name\\
-Matr. 123456, (address@email.com)\\
+Ferrini Francesco\\
+Matr. 755508, (goffredoam84@gmail.com)\\
 \hspace{10ex}
-Last-name First-name\\
-Matr. 123456, (address@email.com)\\
+Gallo Francesco\\
+Matr. 755748, (loshura@hotmail.it)\\
 \begin{flushright}
 \emph{Report for the master course of Embedded Systems}\\
 \emph{Reviser: PhD. Patrick Bellasi (bellasi@elet.polimi.it)}
@@ -76,15 +75,7 @@ Received: April, 01 2011\\
 \hspace{10ex}
 
 \begin{myabstract} Abstract \end{myabstract}
-This is a normal text in 10pt type size and 12pt line spacing.
-Place here a summary of your report. Focus on what is the problem and how you
-propose to tackle it. Briefly resume achieved results.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dapibus. Donec
-fermentum mauris non lectus. Nulla porttitor pede id ante. Donec in erat
-pellentesque erat ultrices rutrum. Pellentesque id tellus. Donec vel mi non dui
-adipiscing tempor.  Nunc laoreet pede ut lectus. Aenean aliquam quam a sem. Duis
-at elit? Ut dolor massa, dictum vel; convallis quis, ullamcorper id, urna.
+abstract
 
 \vspace{4ex}	% Please do not remove or reduce this space here.
 \begin{multicols}{2}
@@ -92,100 +83,41 @@ at elit? Ut dolor massa, dictum vel; convallis quis, ullamcorper id, urna.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Fusce non eros nec dui
-sagittis placerat. Sed vulputate accumsan massa? Quisque dapibus consequat
-magna! Mauris ante erat, ullamcorper eu, iaculis a, posuere at, massa. Donec
-diam orci, luctus non, tristique at, volutpat vulputate, dui.  Suspendisse
-potenti. Vivamus lacinia justo id enim! Maecenas ut odio. Donec nisi urna,
-gravida eu, sollicitudin eget, gravida quis, dolor. Nulla quam erat, convallis
-id, lobortis vel, rutrum tempor, felis. Nam id ante. Sed hendrerit ultricies
-sapien. Morbi interdum convallis elit. Class aptent taciti sociosqu ad litora
-torquent per conubia nostra, per inceptos himenaeos. Suspendisse potenti.
-Praesent egestas.
-
-
-%-----------------------------------------------------------------------------
-\subsection{The first subsection of the first \\ Section}
-% Please avoid separations in titles
-% and separate text manually
-
-This is a citation \cite{Norman09Learn} and here is another citation
-\cite{Peyton93Howto}.  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Sed velit. Ut id orci ut quam placerat rhoncus. Pellentesque sed nisl. Aliquam
-sagittis nunc ut dui.  Nullam elementum felis eget mauris! Curabitur nunc arcu,
-venenatis ac, commodo id, tristique molestie, urna? Donec in tortor vel augue
-rhoncus elementum. Nunc ac felis. Nam nulla quam, cursus sed, egestas nec,
-rutrum et, purus. Nullam sapien mi, ullamcorper rutrum, placerat eget,
-consectetur ut, metus. Integer porta, lacus non fermentum pretium, enim dui
-auctor ligula, ut faucibus lacus sem a metus. Maecenas posuere dui eu est. Ut
-massa urna, auctor quis, tempus et, sollicitudin quis, justo?
-
-
-And this is the reference to a single column figure (see {\bf Figure
-\ref{fig:myfigure1}}).  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Vivamus dapibus convallis odio. Nunc sollicitudin laoreet ante! Vivamus dictum
-euismod orci.
+Numa (Non-Uniform Access Memory) refers to a computer memory design choice used in multiprocessing, where the memory access time depends on the memory location relative to a processor; in fact NUMA means that it will take longer to access some regions of memory than others.
 
 \begin{figurehere}
  \centering
- \includegraphics[width=8cm, height=4cm]{./eps/placeholder.eps}
- \caption{Some single-column figure caption.}
- \label{fig:myfigure1}
+ \includegraphics[width=8cm, height=4cm]{./eps/numa.jpg}
+ \caption{a simple NUMA architecture design}
+ \label{fig:numa}
 \end{figurehere}
 
+In Figure \ref{fig:numa} it's possible to see that in a NUMA multiprocessor the physical memory of the system is distributed among individual processors but is still globally addressable by all processors. Sometimes, it is preferable to have more than one processor in the same area. Each of this computational area containing memory block and CPU, whether it has one or more processors, is called node.Thus the cost of a memory access is dependent on where the memory unit addressed is located; relative to the processor some accesses may be local some may be remote. So, with the introduction of NUMA, data locality becomes an important factor because memory accesses have different costs depending on which memory unit is addressed. The scheduling module in the OS must cooperate with the memory management in order to let an application access data mostly from the local memory. NUMA systems can be classified in two categories, both for memory and for processor; regarding memory there are symmetrical and asymmetrical distribution, meaning that accessing different memory nodes can or cannot cost the same. Concerning processor it is possible to have homogeneous system, meaning that all processors are equal in speed and processing power, opposed to heterogeneous ones, where processors have different specifications even inside the same node. This type of architecture turns out to be exposed to some problems, and the most important are: cache coherence, scheduling and memory management and thread migration.\\
+In multiprocessor systems it is important to ensure cache coherency. If each processor has a cache that reflects the state of various parts of memory, it is possible that two or more caches may have copies of the same line. It is also possible that a given line may contain more than one lockable data item. If two threads make appropriately serialized changes to those data items, the result could be that both caches end up with different, incorrect versions of the line of memory. In other words, the system's state is no longer coherent because the system contains two different versions of what is supposed to be the content of a specific area of memory. There are 2 types of NUMA architectures that we have to analyse: NCC-NUMA (Non Cache Coherent) and CC-NUMA (Cache Coherent). In NCC-NUMA systems we have some software solutions, while in CC-NUMA we have a cooperation of both software and hardware solutions.\\
+Scheduling and memory management are strictly connected; in fact they are used to select the best way to load processes, according to the chosen policy, and decide where to allocate memory concerning that process. The last one is used to decide when it is suitable to migrate a thread from a processor to another one or to a different node; this has an additional cost, due to the migration of the memory associated with the thread. (FIXME....RIVEDERE ULTIMO PARAGRAFO)
 
-%-----------------------------------------------------------------------------
-\subsection{The second subsection of the first \\ Section}
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec et ligula. Nullam
-in libero. Donec dictum pede in justo. Lorem ipsum dolor sit amet, consectetur
-adipiscing elit. Aliquam congue. Aliquam egestas. Nunc eu est ac nibh mattis
-vestibulum. Curabitur aliquet bibendum odio. Etiam hendrerit. Nunc a velit quis
-dui molestie consequat. Sed et turpis et mi feugiat tincidunt. Sed sollicitudin.
-Ut risus? Duis eget orci eu turpis consectetur fringilla? Lorem ipsum dolor sit
-amet, consectetur adipiscing elit. Nullam tellus ligula, placerat vitae, tempor
-vitae, varius id; est! Nullam et ipsum eget tellus eleifend sollicitudin? Fusce
-urna massa, imperdiet vitae, convallis in; lacinia sed, tortor.
-
-\begin{figure*}[t]
-  \centering
- \includegraphics[width=16cm, height=4cm]{./eps/placeholder.eps}
- \caption{Some wide-figure caption.}
- \label{fig:myfigure2}
-\end{figure*}
-
-And this is the reference to a single column figure (see {\bf Figure
-\ref{fig:myfigure2}}). Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Nullam consectetur neque at orci. Curabitur non metus. Praesent congue porta
-nisl. Suspendisse ultricies, sem ac ultrices aliquam, erat nisi fermentum est; a
-rhoncus mauris arcu eget nibh. Aliquam sollicitudin velit non erat. Lorem ipsum
-dolor sit amet, consectetur adipiscing elit. Integer nulla diam, facilisis vel,
-accumsan sed; molestie egestas, massa. Fusce malesuada, ipsum et pulvinar
-aliquet, est dolor laoreet enim, quis porttitor erat mauris eget sapien. Integer
-vitae urna. Duis lectus.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The Second Section}
+\section{Solutions and Methods}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.  Aenean magna. Nunc non
-ante eget nibh condimentum tempor. Nullam ullamcorper lectus eget mauris. Nam
-neque orci; rhoncus at, pulvinar quis, elementum sit amet, turpis. Mauris
-posuere nisi ut justo. Morbi non lorem vitae mauris interdum faucibus.
-Vestibulum ut sapien in augue faucibus fringilla. Vestibulum ante ipsum primis
-in faucibus orci luctus et ultrices posuere cubilia Curae; Etiam vestibulum
-fringilla libero. Curabitur libero diam, hendrerit sit amet, ornare eget,
-imperdiet vel, purus!
-
+In this chapter will be presented some solutions about the problems introduced in previous section, divided by argument. Evaluations will be considered in the next chapter.
 
 %-----------------------------------------------------------------------------
-\subsection{The first subsection of the second \\ Section}
+\subsection{Cache Coherence \\ Section}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam consectetur ante at
-eros. Vestibulum mi nisi, venenatis sollicitudin, tempus sed, auctor id, tortor.
-Fusce orci. Duis tellus arcu, euismod sed, consequat sit amet, elementum vel,
-mauris. Curabitur leo diam; dapibus quis, condimentum vitae, dignissim ut, diam.
-Nulla et nulla eget elit volutpat sagittis.
+As seen before, there are 2 types of NUMA architectures that will be analysed: NCC-NUMA (Non Cache Coherent - NUMA) and CC-NUMA (Cache Coherent - NUMA). \\
+In NCC-NUMA systems, [CIT.Shared memory multiprocessing di Norihisa Suzuki ] explain that the inter-cache coherence problem can be solved if shared data, or writable shared data strictly, are not cached with Cacheability Marking Scheme. An attribute bit, called cacheable bit, is provided in each page-table entry to specify whether data in the associated virtual page are cacheable or not. So an OS, with the help of a compiler, marks only virtual pages, which are mapped to either private space or read-only common space, as cacheable pages. When a cache miss occurs on accessing a line of a noncacheable page, an MMU (memory managament unit) does not load the line into the cache. While the page is marked noncacheable, all accesses to the page are always performed in either local or remote memory.\\
+Conserning the same problem, [CIT. Software Cache Coherence for Large Scale Multiprocessor - Leonidas I. Kontothanassis and Michael L. Scott] shown a new adaptive algorithm for software cache coherence that reduces interprocessor communication and scales to large numbers of processors; they then evaluate the tradeoffs among various write policies and the effect on performance of using remote memory access. Finally they also observe that certain simple program changes can greatly improve performance.\\
+Regarding CC-Numa [CIT. Cache coherency Techniques - Silvia Lametti] explains there are two protocols that are used to guarantee coherence: snooping and directory-based. Snooping system use a totally ordered network to directly broadcast coherence transactions to all processors and memory. Another solution is directory-based protocol; this one transmits coherence transactions over an arbitrary point-to-point network to the corresponding home directories which, in turn, redirect them to the processors caching the line. 
 
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=4cm]{./eps/SnoopeDir.png}
+ \caption{Snooping and Directory-based protocol}
+ \label{fig:s&d}
+\end{figurehere}
+
+In all the systems which use the automatic techniques (snooping and directory), a proper protocol must exists in order to perform the required actions atomically.
 %-----------------------------------------------------------------------------
 \subsection{The second subsection of the second \\ Section}
 
