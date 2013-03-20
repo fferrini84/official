@@ -117,17 +117,33 @@ Regarding CC-Numa [CIT. Cache coherency Techniques - Silvia Lametti] explains th
  \label{fig:s&d}
 \end{figurehere}
 
-In all the systems which use the automatic techniques (snooping and directory), a proper protocol must exists in order to perform the required actions atomically.
-%-----------------------------------------------------------------------------
-\subsection{The second subsection of the second \\ Section}
+In all the systems which use the automatic techniques (snooping and directory), a proper protocol must exists in order to perform the required actions atomically. Two main techniques are used: \emph{invalidation}, \emph{update}.\\
+Invalidation assumes that the only valid copy of a block is one of those, usually the last one, that has changed, invalidating all other copies (e.g. MSI and MESI in Figure \ref{fig:msimesi}); while update presumes that each modifcation of a cache block copy is communicated (multicasted) to all other caches (e.g. Dragon).
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris eget mauris.
-Nulla facilisi. Ut condimentum tempor eros? Integer metus mauris, consectetur
-sit amet, tempor a, facilisis eu, nisl. Vestibulum at turpis. Ut vitae tortor
-pretium nisl vestibulum blandit. Nulla nibh urna, semper et, elementum at,
-mattis ut, nisi! Cum sociis natoque penatibus et magnis dis parturient montes,
-nascetur ridiculus mus. Morbi vel ligula eget lacus convallis venenatis. Aliquam
-lacinia tincidunt felis. Ut dui.
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=4cm]{./eps/msimesi.png}
+ \caption{MESI and MSI protocol}
+ \label{fig:msimesi}
+\end{figurehere}
+
+%-----------------------------------------------------------------------------
+\subsection{Scheduling and memory management \\ Section}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Evaluation}
+
+In this section it will be discussed the difference between the proposed solutions above giving some value coming from direct confrontation.
+
+%-----------------------------------------------------------------------------
+\subsection{Cache coherence \\ Section}
+
+
+%-----------------------------------------------------------------------------
+\subsection{Scheduling and memory management \\ Section}
+
 
 % We suggest the use of JabRef for editing your bibliography file (Report.bib)
 \bibliographystyle{splncs}
