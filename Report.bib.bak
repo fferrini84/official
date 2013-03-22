@@ -25,7 +25,7 @@
   year = {1995}
 }
 
-@MISC{moh,
+@MISC{,
   author = {Sang-Man Moh and Woo-Jong Hahn and Suk-han Yoon},
   title = {Cache Coherence Protocols in NUMA Multiprocessor},
   owner = {Francesco},
