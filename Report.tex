@@ -147,15 +147,11 @@ In this section it will be discussed the difference between the proposed solutio
 %-----------------------------------------------------------------------------
 \subsection{Cache coherence \\ Section}
 
+\subsubsection{Cache coherence in NCC-NUMA}
 Hardware coherence mechanisms for large-scalemachines are complex and costly, but existing software mechanisms for message-passing machines have not provided a performance-competitive solution. \par 
-\parindent 10mm In  [CIT. Multiprocessor cache coherence based on virtual memory support  petersen, Li 1995]  they present a comparative analysis of the performance achived by VM-based algorithm relative to \emph{no caching of shared data} (NO) and the \emph{MESI, invalidation-based, snoopy cache protocol} (Snoop). \par 
-\parindent 10mm
+\parindent 10mm In  [CIT. Multiprocessor cache coherence based on virtual memory support  petersen, Li 1995]  they present a comparative analysis of the performance achived by VM-based algorithm relative to \emph{no caching of shared data} (NO) and the \emph{MESI, invalidation-based, snoopy cache protocol} (Snoop). \\
 As it is possible to observe from Figure \ref{fig:result1}, the NO, as expected, it has poor performance for most applications. It is possible to see that there can be a signicant performance gain from using VM-SC, rather than no-caching. However MUL performs best with no caching because only a little over 50% of all shared accesses hit in the cache. \par 
-\parindent 10mm The best algorithm VM-based that they proposed is the RC version ( Figure \ref{fig:result1}). In fact the overhead due to coherency faults decreases in VM-RC because of the relaxed memory consistency restrictions, and accounts for most of the improvement of each application. They then compared RC with Snoop; the execution time breakdown for each application shows two reasons for the difference in performance between VM-RC and Snoop: the overhead due to the VM-based imple- mentation of RC, the time a processor stalls on a full write-buffer, and the time a processors spends waiting for memory loads to complete. The cache miss ratio under Snoop and VM-RC is very similar for all applications, therefore the number of memory accesses due to shared and private accesses that require a bus transaction is very close. The total memory access time in VM-RC is affected mostly by memory  accesses issued by the algorithm and due to write-throughs. Relaxing the memory consistency models, and hence synchronizing the processors in the system only  when the application requires to do so, allows the VM-based RC cache coherence scheme to perform very well.
-
-
-
-
+\parindent 10mm The best algorithm VM-based that they proposed is the RC version ( Figure \ref{fig:result1}). In fact the overhead due to coherency faults decreases in VM-RC because of the relaxed memory consistency restrictions, and accounts for most of the improvement of each application. They then compared RC with Snoop; the execution time breakdown for each application shows two reasons for the difference in performance between VM-RC and Snoop: the overhead due to the VM-based implementation of RC, the time a processor stalls on a full write-buffer, and the time a processors spends waiting for memory loads to complete. The cache miss ratio under Snoop and VM-RC is very similar for all applications, therefore the number of memory accesses due to shared and private accesses that require a bus transaction is very close. The total memory access time in VM-RC is affected mostly by memory  accesses issued by the algorithm and due to write-throughs. Relaxing the memory consistency models, and hence synchronizing the processors in the system only  when the application requires to do so, allows the VM-based RC cache coherence scheme to perform very well. 
 
 
 \begin{figurehere}
@@ -167,10 +163,51 @@ As it is possible to observe from Figure \ref{fig:result1}, the NO, as expected,
 
 \begin{figure*}
  \centering
- \includegraphics[width=16cm, height=8cm]{./eps/result1.PNG}
+ \includegraphics[width=14cm, height=7cm]{./eps/result1.PNG}
  \caption{Performance of VM-based schemes}
  \label{fig:result1}
 \end{figure*}
+
+\parindent 10mm In their articles,\emph{ Kontothanassis and Scott}[CIT. Software cache coherence for large scale multiprocessores] used virtual memory protection bits to enforce consistency at the granularity of pages allowing more than one processor to write a page concurrently,and used a variant of release consistency to limit coherence operations to synchronization points.\\
+As in the work of \emph{Petersen and Li}, they exploit the global physical address space to move data at the granularity of cache lines: instead of copying pages, thay  map them remotely, and allow the hardware to fetch cache lines on demand. The protocol employs a distributed, non-replicated directory data structure that maintains cacheability and sharing information, similar to the coherent map data structure. A page can be in one of the following four states:
+\begin{itemize}
+    \item \textbf{Uncached}, no processor has a mapping to the page. This
+is the initial state for all pages.
+    \item \textbf{Shared}, one or more processors have read-only mappings
+to the page.
+   \item \textbf{Dirty}, a single processor has both read and write mappings
+to the page.
+   \item \textbf{Weak},  two or more processors have mappings to the page
+and at least one has both read and write mappings.
+\end{itemize}
+
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=4cm]{./eps/result16proc.png}
+ \caption{comparative software and hardware system performance on 16 processors}
+ \label{fig:16proc}
+\end{figurehere}
+
+They, then, compared their software protocol to the protocol devised by \emph{Petersen and Li}. They found out that their implementation was significantly better then the other and even on applications that in programs where coherence is less important, their protocols still provide reasonable performance improvements over the remaining ones, ranging from 2\% to 35\%.
+
+
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=4cm]{./eps/result64proc.png}
+ \caption{comparative software and hardware system performance on 64 processors}
+ \label{fig:64proc}
+\end{figurehere}
+
+Int the end, however, they compared their software solutions to hardware existing solutions and find out that in all cases the performance of the software protocol is within 55\% of the hardware protocol as shown in Figure \ref{fig:16proc} and in Figure \ref{fig:64proc}.\par
+\parindent 10mm Thus, in the following section will be shown a couple of hardware solutions tipically found on cc-NUMA.
+
+\subsubsection{Cache coherence in CC-NUMA}
+
+As previously said, CC-NUMA have hardware solutions to manage coherency and there exists two different implementation depending on the architecture: BUS or an interconnection structure. According to the implemented architecture, a different solution is used to update and control caches: snooping and directory-based.\par
+\parindent 10mm It is important to choose a good protocol for cache coherence on a cache coherent system, thus write invalidate and write update have been examined to choose the best.\par
+\parindent 10mm Update protocol conserves bandwidth and needs only one update  transaction to keep multiple sharers up to date but generates a lot of unnecessary traffic when a single processor writes  repeatedly to a block and no other processor accesses the block. On the other hand, invalidate does exactly the opposite and this means that there is not a best solution because both depend on the kind of application running.\par
+\parindent 10mm As previously said, there are two hardware architecture: with a bus or with an interconnection structure. Nowadays it is common knowledge that using a bus architecture with a large number of nodes doesn't work very well because this solution presents some problems due to the fact that every request is broadcasted on the BUS and this tends to overfill the bandwidth. Even an interconnection structure has some problems, typically the overhead of directory indirection and message sequencing, but it is a fair price to pay compared to the benefits. [CIT. cache coherent protocols in NUMA multiprocessor - Moh-Hahn, Yoon ]
+
 
 %-----------------------------------------------------------------------------
 \subsection{Scheduling and memory management \\ Section}
