@@ -262,6 +262,9 @@ As previously said, CC-NUMA have hardware solutions to manage coherency and ther
 %-----------------------------------------------------------------------------
 \subsection{Scheduling and memory management \\ Section}
 
+Regarding static and dynamic polices \emph{Wu} believe that by utilizing application characteristics, it is possible for a static policy to outperform a dynamic policy in NUMA systems; therefore he preents a comparison between the two policies as shown in Figure \ref{fig:tabella}.
+
+
 \begin{figurehere}
  \centering
  \includegraphics[width=8cm, height=4cm]{./eps/tabella.png}
@@ -269,6 +272,29 @@ As previously said, CC-NUMA have hardware solutions to manage coherency and ther
  \label{fig:tabella}
 \end{figurehere}
 
+In order to prove his theory he compares ISS policie with the existing ones (static and dynamic).\\
+The first comparison is versus static (STA) and he argues that one of the drawbacks of the Static policy is that it fails to start an application soon after it has arrived. The Immediate Start Static policy, however, addresses this drawback and starts a newly arrived application almost immediately. To determine the effect of this change in the static policy, and the benefit of reallocating both at arrivals and completions, the performance of STA and ISS were studied and compared.
+Figure \ref{fig:issvssta} presents the performance of STA and ISS on 12  processors. Workload represents the minimum average response time without multiprogramming. Notice that this minimum average response time is 7.2\% larger for the ISS policy than for the STA policy because the implementation of ISS is slightly more complicated than STA.
+
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=3cm]{./eps/issvssta.png}
+ \caption{Mean response time under STA and ISS}
+ \label{fig:issvssta}
+\end{figurehere}
+
+In all four workloads studied, ISS outperforms STA by  15-40\%. The STA policy prevents the completion of small applications by not starting a new application soon after it arrives, even though there may be other applications with more than one processor. This delay in completion of one application will lead to further delay to subsequent applications in the workload. As a result, the mean response time of STA is much worse than ISS. The benefit of immediately starting a new application becomes more apparent as the system load increases. The longer the waiting queue, the poorer the performance is since remaining applications in the workload are subject to more subsequent delays. Since STA is a policy that reallocates only at completions, and ISS is a policy that reallocates both at arrivals and completions, the result of this experiment also indicates the importance of reallocating at both arrivals and completions.\\
+
+The second comparison is versus dynamic (DYN) policy. The slightly worse performance of DYN compared to ISS is because of the extra overhead in DYN. These overheads include the overhead of context switching among applications, the overhead of constant communication between the scheduler and applications, the overhead of more frequent cache reloads, and the overhead of more costly memory accesses due to loss of data locality. The performance of the Immediate Start Static policy compared to the Dynamic policy is presented in the following Figure \ref{fig:issvsdyn}.
+
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=3cm]{./eps/issvsdyn.png}
+ \caption{Mean response time under STA and DYN}
+ \label{fig:issvsdyn}
+\end{figurehere}
+
+As the service demands of applications become larger, the DYN policy becomes more appropriate. When the overhead of DYN is made smaller relative to the service demands of applications, the cost of frequent reallocating processors in DYN can be justified. However, dynamic scheduler might be inappropriate in NUMA systems; the simpler and more static approach of the ISS policy attempts to maintain data locality and cache affinity by avoiding frequent reallocations of processors, at the same time reducing overhead. When remote access times are made larger (as they would be in a larger system), the ISS policy continues to dominate the DYN policy for a mixed workload. As a result, ISS performs better than the more dynamic policy, DYN.
 
 \section{Conclusion}
 We want to discuss and recap about the results reached by our references, proposing an our personally opinion concerning the NUMA architecture issues.
