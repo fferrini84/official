@@ -71,7 +71,7 @@ Matr. 755748, (loshura@hotmail.it)\\
 \emph{Reviser: PhD. Patrick Bellasi (bellasi@elet.polimi.it)}
 \end{flushright}
 
-Received: April, 01 2011\\
+Received: March, 26 2013\\
 \hspace{10ex}
 
 \begin{myabstract} Abstract \end{myabstract}
@@ -262,7 +262,7 @@ As previously said, CC-NUMA have hardware solutions to manage coherency and ther
 %-----------------------------------------------------------------------------
 \subsection{Scheduling and memory management \\ Section}
 
-Regarding static and dynamic polices \emph{Wu} believe that by utilizing application characteristics, it is possible for a static policy to outperform a dynamic policy in NUMA systems; therefore he preents a comparison between the two policies as shown in Figure \ref{fig:tabella}.
+Regarding static and dynamic polices \emph{Wu} believes that by utilizing application characteristics, it is possible for a static policy to outperform a dynamic policy in NUMA systems; therefore he preents a comparison between the two policies as shown in Figure \ref{fig:tabella}.
 
 
 \begin{figurehere}
@@ -294,7 +294,20 @@ The second comparison is versus dynamic (DYN) policy. The slightly worse perform
  \label{fig:issvsdyn}
 \end{figurehere}
 
-As the service demands of applications become larger, the DYN policy becomes more appropriate. When the overhead of DYN is made smaller relative to the service demands of applications, the cost of frequent reallocating processors in DYN can be justified. However, dynamic scheduler might be inappropriate in NUMA systems; the simpler and more static approach of the ISS policy attempts to maintain data locality and cache affinity by avoiding frequent reallocations of processors, at the same time reducing overhead. When remote access times are made larger (as they would be in a larger system), the ISS policy continues to dominate the DYN policy for a mixed workload. As a result, ISS performs better than the more dynamic policy, DYN.
+As the service demands of applications become larger, the DYN policy becomes more appropriate. When the overhead of DYN is made smaller relative to the service demands of applications, the cost of frequent reallocating processors in DYN can be justified; this is also the result found within Juggle \cite{juggle}, where it is said that their parameter must be at minumum the overhead of Juggle itself (about \emph{100 microseconds}); when the parameter is on the order of the scale at which the OS scheduler operates, the assumption that each thread gets a fair share of a processing element breaks down. We can see this in Figure \ref{fig:juggle}, which shows how performance degrades as the parameter falls below \emph{10ms}, which is the scheduling interval on that particular system. As the parameter reduces even further, the \emph{100 microseconds} overhead starts to impact performance.
+
+\begin{figurehere}
+ \centering
+ \includegraphics[width=8cm, height=3.5cm]{./eps/juggle.png}
+ \caption{Effect of decreasing parameter.}
+ \label{fig:juggle}
+\end{figurehere}
+
+However, dynamic scheduler might be inappropriate in NUMA systems; the simpler and more static approach of the ISS policy attempts to maintain data locality and cache affinity by avoiding frequent reallocations of processors, at the same time reducing overhead. When remote access times are made larger (as they would be in a larger system), the ISS policy continues to dominate the DYN policy for a mixed workload. As a result, ISS performs better than the more dynamic policy, DYN.
+
+The importance of data locality is also shown in \emph{Majo and Gross} 's paper \cite{Majo_memorymanagement}. They present two cases: when memory allocation in a NUMA-multicore system is balanced (the cumulative memory demand of processes homed on each processor in the system is approximately the same), then it is beneficial to simply map processes onto the architecture so that data locality is favored, and avoiding cache contention does not bring any benefits; otherwise, when the memory allocation in the system is unbalanced (the sum of the memory demands of processes homed on each processor in the system is different), then mapping processes so that data locality is maximized can lead to severe cache contention; in these cases refining the maximum-local mapping so that cache contention is reduced improves performance, even with the cost of some processes executing remotely. N-MASS algorithm, an extension of the maximum-local, was created to solve the problem with unbalanced memory allocation.
+
+
 
 \section{Conclusion}
 We want to discuss and recap about the results reached by our references, proposing an our personally opinion concerning the NUMA architecture issues.
